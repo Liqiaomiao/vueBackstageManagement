@@ -16,6 +16,7 @@ import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'videojs-contrib-hls'
 
+
 Vue.use(ElementUI);
 Vue.use(ZkTable);
 Vue.use(iView)
@@ -28,8 +29,8 @@ Vue.config.productionTip = false;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router:router,
-  store: store,
+  router,
+  store,
   components: { App },
   template: '<App/>'
 })

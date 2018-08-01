@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <zk-table
       ref="table"
       sum-text="sum"
@@ -45,6 +44,7 @@
 <script>
   import {menudata} from '../../data/menu.js';
   import Form from '../common-components/common-form.vue';
+  import axios from 'axios'
   var obj=new Map();
   var parents=[];
   var test=new Map();
@@ -93,7 +93,10 @@
   var menuArray=treedata(menudata.obj);
   export default {
     name: 'smenu',
-    data() {
+    components:{
+      Form
+    },
+    data(){
         var states=[{value:'1',label:'有效'},{value:'0',label:'无效'}];
       return {
         menudata:menuArray,
@@ -173,7 +176,7 @@
           ]
 
         }
-      };
+      }
     },
     methods: {
       formatterurl(data){//表格地址格式化
@@ -238,8 +241,13 @@
           done();
       }
     },
-    components:{
-      Form
+    created (){
+      axios({
+        url:''
+      })
+     },
+    mounted(){
+      console.log('mounted',this.$el,this.form);
     }
   };
 </script>

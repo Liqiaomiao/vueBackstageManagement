@@ -1,39 +1,89 @@
 <template>
-  <zk-table
-    ref="table"
-    sum-text="sum"
-    index-text="#"
-    :data="data"
-    :columns="columns"
-    :stripe="props.stripe"
-    :border="props.border"
-    :show-header="props.showHeader"
-    :show-summary="props.showSummary"
-    :show-row-hover="props.showRowHover"
-    :show-index="props.showIndex"
-    :tree-type="props.treeType"
-    :is-fold="props.isFold"
-    :expand-type="props.expandType"
-    :selection-type="props.selectionType"
-    @tree-icon-click="handleExpand"
-  >
-    <template slot="resourceUrl" scope="scope">
-      {{urlreset(scope)}}
-    </template>
-    <template slot="resourcePid" scope="scope">
-      {{getPname(scope)}}
-    </template>
-  </zk-table>
+  <div>
+    <el-button size="small" type="primary" class="mb15" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+    <zk-table
+      class="mt15"
+      ref="table"
+      sum-text="sum"
+      index-text="#"
+      :data="data"
+      :columns="columns"
+      :stripe="props.stripe"
+      :border="props.border"
+      :show-header="props.showHeader"
+      :show-summary="props.showSummary"
+      :show-row-hover="props.showRowHover"
+      :show-index="props.showIndex"
+      :tree-type="props.treeType"
+      :is-fold="props.isFold"
+      :expand-type="props.expandType"
+      :selection-type="props.selectionType"
+      @tree-icon-click="handleExpand"
+    >
+      <template slot="resourceUrl" slot-scope="scope">
+        {{urlreset(scope)}}
+      </template>
+      <template slot="resourcePid" slot-scope="scope">
+        {{getPname(scope)}}
+      </template>
+      <template slot="myac" slot-scope="scope">
+        <el-button plain size="small" >编辑</el-button>
+      </template>
+    </zk-table>
+
+    <!--添加-->
+    <el-dialog
+      title="菜单管理添加"
+      :visible.sync="dialogVisible"
+      width="580px"
+      :append-to-body="true"
+      top="25vh"
+      :before-close="handleClose">
+      <div style="width:65%;margin: 0 auto; ">
+        <el-form  ref="form" size="small" label-width="80px" :rules="rules" :model="form" >
+          <el-form-item label="菜单名称" prop="label">
+            <el-input v-model="form.label" ></el-input>
+          </el-form-item>
+          <el-form-item label="菜单路径" prop="resourceUrl">
+            <el-input v-model="form.resourceUrl"></el-input>
+          </el-form-item>
+          <el-form-item label="父级节点" prop="resourcePid">
+            <el-cascader
+              expand-trigger="hover"
+              :options="data"
+              v-model="form.resourcePid"
+              >
+            </el-cascader>
+          </el-form-item>
+          <el-form-item label="激活状态" prop="state">
+            <el-select v-model="form.state" placeholder="请选择激活状态">
+              <el-option label="有效" value="shanghai"></el-option>
+              <el-option label="无效" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="同级顺序" prop="resourceOrderNum">
+            <el-input v-model="form.resourceOrderNum"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+    </el-dialog>
+  </div>
+
 </template>
 
 <script>
   import axios from 'axios'
   import {urls} from '../../apiConfig.js'
-
   export default {
     name: "s-menu2",
     data() {
       return {
+        dialogVisible: false,
         props: {
           stripe: true,
           border: true,
@@ -52,13 +102,13 @@
         columns: [
           {
             label: '菜单管理',
-            prop: 'resourceName',
+            prop: 'label',
             width: '500px',
           },
           {
             label: '菜单路径',
             prop: 'resourceUrl',
-            minWidth: '50px',
+            minWidth: '100px',
             type: 'template',
             template: 'resourceUrl',
           },
@@ -66,23 +116,56 @@
             label: '父级菜单',
             prop: 'resourcePid',
             type: 'template',
+            minWidth: '100px',
             template: 'resourcePid',
           },
           {
             label: '同级顺序',
             prop: 'resourceOrderNum',
+            minWidth: '100px',
           },
           {
             label: '操作',
-            prop: 'likes',
-            minWidth: '200px',
+            prop: 'myac',
+            minWidth: '20px',
             type: 'template',
-            template: 'likes',
+            template: 'myac',
+            align:'center',
+            headerAlign:'center'
           },
         ],
         tableheader: '',
-        tablebody: ''
-      };
+        tablebody: '',
+        form:{
+          label:'',
+          resourceUrl:'',
+          resourcePid:[],
+          state:'',
+          resourceOrderNum:"",
+        },
+
+        rules:{
+          label:[
+            { required: true, message: '请输入菜单名称', trigger: 'blur' },
+            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+            ],
+          resourceUrl:[
+            { required: true, message: '请选择激活状态', trigger: 'change' },
+          ],
+          resourcePid:[
+            { required: true, message: '请选择激活状态', trigger: 'change' },
+          ],
+          state:[
+            { required: true, message: '请选择激活状态', trigger: 'change' },
+          ],
+          resourceOrderNum:[
+            { required: true, message: '请输入同级顺序', trigger: 'blur' },
+            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          ],
+
+
+        }
+      }
     },
     computed: {
       propList() {
@@ -104,7 +187,6 @@
         if (scope.row.resourcePid) {
           return this.parents[index - 1]
         }
-
       },
       resetWitdth() {//重置表格宽度
         let $tablebody = this.tablebody;
@@ -117,13 +199,23 @@
         let windowH = document.body.clientHeight || document.documentElement.clientHeight;
         let headerh = parseInt(document.querySelector('.el-header').clientHeight);
         let $tableheader = this.tableheader;
-        this.tablebody.style.height = windowH - headerh - $tableheader.clientHeight - 40 + 'px';
+        this.tablebody.style.height = windowH - headerh - $tableheader.clientHeight - 80 + 'px';
       },
-      handleExpand() {
+      handleExpand() { //鼠标单击树形icon
         setTimeout(() => {
           this.resetWitdth()
         }, 50)
 
+      },
+      handleAdd(){
+         this.dialogVisible=true;
+      },
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     },
     mounted() {
@@ -132,7 +224,6 @@
       }).then(async (res) => {
         let menudata = res.data.obj;
         this.data = menudata;
-
         function flat(arr) {
           let result = [];
           arr.forEach((item) => {
@@ -140,9 +231,9 @@
           });
           return result
         }
-
         let last = flat(menudata);
         this.parents = last;
+
         await  setTimeout(() => { //表头宽度调整
           this.resetWitdth()
         }, 10)
@@ -166,5 +257,5 @@
 </script>
 
 <style scoped>
-
+  .zk-table{font-size: 14px;color:#606266}
 </style>

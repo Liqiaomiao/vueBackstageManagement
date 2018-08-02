@@ -11,7 +11,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/index.css';
 import $ from 'jquery';
 import store from './store';
-
+import Pop from './components/common-components/pop-common.vue'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'videojs-contrib-hls'
@@ -24,7 +24,7 @@ Vue.use(iView)
 
 
 Vue.config.productionTip = false;
-
+Vue.component('Pop',Pop)
 
 /* eslint-disable no-new */
 new Vue({

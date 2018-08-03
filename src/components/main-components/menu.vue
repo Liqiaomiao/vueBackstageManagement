@@ -2,18 +2,18 @@
     <div>
       <template v-for="list in this.menuList" >
         <!--循环父级-->
-        <el-submenu index="1" v-if="list.children.length>0" :key="list.resourceId" :index="list.resourceName"  >
+        <el-submenu index="1" v-if="list.children" :key="list.value" :index="list.label"  >
           <!--父级html-->
           <template slot="title"  style="padding-left:10px" >
             <i class="el-icon-menu"></i>
-            <span slot="title">{{ list.resourceName}}</span>
+            <span slot="title">{{ list.label}}</span>
           </template>
           <!--递归的子集hmlt-->
           <Menu :menuList="list.children"></Menu>
         </el-submenu>
         <!--循环子集-->
-        <el-menu-item v-else :index="list.resourceName"  :key="list.resourceId" style="padding-left: 50px;" >
-          <span>{{list.resourceName}}</span>
+        <el-menu-item v-else :index="list.label"  :key="list.value" style="padding-left: 50px;" >
+          <span>{{list.label}}</span>
         </el-menu-item>
       </template>
     </div>

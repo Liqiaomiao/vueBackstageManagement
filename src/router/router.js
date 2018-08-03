@@ -33,8 +33,8 @@ export const appRouter=[
     name: '系统管理',
     component: Main,
     children:[
-      {path:'menu',title:'菜单管理',name:'菜单管理',component:Smenu},
-      {path:'user',title:'用户管理',name:'用户管理',component:Suser},
+      {path:'menu',title:'树形表格',name:'树形表格',component:Smenu},
+      {path:'user',title:'普通表格',name:'普通表格',component:Suser},
       {path:'role',title:'角色管理',name:'角色管理',component:Srole},
       {path:'video',title:'视频播放',name:'视频播放',component:Video},
       {path:'tableTree',title:'树表格',name:'树表格',component:tableTree}

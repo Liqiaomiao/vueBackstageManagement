@@ -118,23 +118,23 @@
     var result=[];
     var p='';
     $.each(data,function (i, item) {
-      obj.set(item.resourceId,[item.resourceName]);
-      let parray=obj.get(item.resourcePid);
+      obj.set(item.value,[item.label]);
+      let parray=obj.get(item.value);
       if(parray){
         p=parray[0];
       }
-      if(item.children.length>0){
-        test.set(item.resourceId,[item.resourcePid,item.resourceId]);
+      if(item.children){
+        test.set(item.value,[item.resourcePid,item.value]);
         result.push({
-          key:item.resourceId,
-          label:item.resourceName,
+          key:item.value,
+          label:item.label,
           children:treedata(item.children)
         })
       }
       else{
         result.push({
-          key:item.resourceId,
-          label:item.resourceName
+          key:item.value,
+          label:item.label
         })
       }
     });

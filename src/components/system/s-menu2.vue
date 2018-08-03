@@ -319,8 +319,15 @@
 
         });
       }else{
-        this.loading2=false ;
-        this.data=menudata2
+        (async()=> {
+          this.loading2=false ;
+          this.data=menudata2 ;
+          await setTimeout(() => { //表头宽度调整
+            this.resetWitdth()
+            this.resetHeight()
+          }, 10)
+        })()
+
       }
 
       let $table = this.$refs.table.$el;

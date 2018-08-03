@@ -47,6 +47,8 @@
     import Tabs from './main-components/tabs.vue';//切签
     import axios from 'axios'
     import {urls} from '../apiConfig.js'
+    import  {menudata} from "../data/menu";
+
     export default{
         name:"Main",
         data(){
@@ -64,7 +66,7 @@
               collapseMain:{
                 paddingLeft:'50px'
               },
-              menuList:'',//侧导航
+              menuList:menudata.obj,//侧导航
               breads:[],//面包屑
               tabs:this.$store.state.app.tabs,
               tabActive:'',
@@ -126,11 +128,7 @@
 
         },
         mounted(){
-          axios({
-            url:urls.getmenu
-          }).then((res)=>{
-          this.menuList=res.data.obj
-          });
+
           this.duplicatMethods();
           //this.duplicatMethods();//从404返回后能正常显示。
         },

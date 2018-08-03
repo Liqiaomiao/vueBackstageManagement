@@ -1,7 +1,8 @@
 /**
  * Created by Liqiaomiao on 2018/4/12.
  */
-import Role from"./role.js"
+import Role from "./role.js"
+import menu from "./menu"
 var tablist = sessionStorage.getItem("tablist");
 var currentbread=localStorage.getItem("currentBread");
 

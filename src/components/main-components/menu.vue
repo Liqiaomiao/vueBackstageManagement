@@ -3,6 +3,7 @@
       <template v-for="list in this.menuList" >
         <!--循环父级-->
         <el-submenu  v-if="list.children" :key="list.value" :index="list.label"  >
+
           <!--父级html-->
           <template slot="title"  style="padding-left:10px" >
             <i class="el-icon-menu"></i>

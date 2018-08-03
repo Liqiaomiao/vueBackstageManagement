@@ -1,7 +1,6 @@
 /**
  * Created by Liqiaomiao on 2018/8/3.
  */
-'use strict';
 export const transfer={
   data2: [{
     id: 1,

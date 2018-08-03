@@ -1,8 +1,9 @@
 <template>
   <div>
-    <el-button size="small" type="primary" class="mb15" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+    <div class="button_container">
+      <el-button size="small" type="primary" class="mb15" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+    </div>
     <zk-table
-      class="mt15"
       ref="table"
       sum-text="sum"
       index-text="#"
@@ -27,7 +28,7 @@
         {{getPname(scope)}}
       </template>
       <template slot="myac" slot-scope="scope">
-        <el-button plain size="small" >编辑</el-button>
+        <el-button plain size="small" @click="handleEditor(scope)" >编辑</el-button>
       </template>
     </zk-table>
 
@@ -57,8 +58,8 @@
           </el-form-item>
           <el-form-item label="激活状态" prop="state">
             <el-select v-model="form.state" placeholder="请选择激活状态">
-              <el-option label="有效" value="shanghai"></el-option>
-              <el-option label="无效" value="beijing"></el-option>
+              <el-option label="有效" value="1"></el-option>
+              <el-option label="无效" value="2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="同级顺序" prop="resourceOrderNum">
@@ -143,20 +144,17 @@
           state:'',
           resourceOrderNum:"",
         },
-
         rules:{
           label:[
             { required: true, message: '请输入菜单名称', trigger: 'blur' },
             { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
             ],
           resourceUrl:[
-            { required: true, message: '请选择激活状态', trigger: 'change' },
+            { required: true, message: '请输入菜单路径', trigger: 'blur' },
           ],
-          resourcePid:[
-            { required: true, message: '请选择激活状态', trigger: 'change' },
-          ],
+
           state:[
-            { required: true, message: '请选择激活状态', trigger: 'change' },
+            { required: true, message: '请选择激活状态 ', trigger: 'change' },
           ],
           resourceOrderNum:[
             { required: true, message: '请输入同级顺序', trigger: 'blur' },
@@ -183,7 +181,7 @@
         return result
       },
       getPname(scope) {
-        var index = this.parents.indexOf(scope.row.resourcePid)
+        var index = this.parents.indexOf(scope.row.resourcePid);
         if (scope.row.resourcePid) {
           return this.parents[index - 1]
         }
@@ -198,8 +196,10 @@
       resetHeight() {//设置表格高度
         let windowH = document.body.clientHeight || document.documentElement.clientHeight;
         let headerh = parseInt(document.querySelector('.el-header').clientHeight);
+        let btnH =  document.querySelector('.button_container').offsetHeight;
         let $tableheader = this.tableheader;
-        this.tablebody.style.height = windowH - headerh - $tableheader.clientHeight - 80 + 'px';
+        let padH =  40;
+        this.tablebody.style.height = windowH - headerh - $tableheader.clientHeight - btnH-padH + 'px';
       },
       handleExpand() { //鼠标单击树形icon
         setTimeout(() => {
@@ -211,11 +211,22 @@
          this.dialogVisible=true;
       },
       handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
+         this.resetForm()
+         done();
+      },
+      resetForm(formName) {
+        this.$refs.form.resetFields();
+      },
+      handleEditor(rowInfo){
+        let rowValue =rowInfo.row;
+        this.form={
+          label:rowValue.label,
+          resourceUrl:rowValue.resourceUrl,
+          resourcePid:rowValue.resourcePid?rowValue.resourcePid.split("-"):[],
+          state:rowValue.state,
+          resourceOrderNum:rowValue.resourceOrderNum,
+        };
+         this.dialogVisible=true;
       }
     },
     mounted() {
@@ -227,13 +238,16 @@
         function flat(arr) {
           let result = [];
           arr.forEach((item) => {
-            result.push(item.resourceName, item.resourceId)
+             if(item.children){
+               result=result.concat(flat(item.children))
+             }
+               result.push(item.label, item.value)
           });
           return result
         }
         let last = flat(menudata);
-        this.parents = last;
 
+        this.parents = last;
         await  setTimeout(() => { //表头宽度调整
           this.resetWitdth()
         }, 10)
@@ -258,4 +272,5 @@
 
 <style scoped>
   .zk-table{font-size: 14px;color:#606266}
+  .button_container{padding-bottom: 15px;}
 </style>

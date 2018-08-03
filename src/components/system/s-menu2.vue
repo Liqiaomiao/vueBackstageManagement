@@ -39,7 +39,9 @@
       width="580px"
       :append-to-body="true"
       top="25vh"
-      :before-close="handleClose">
+      :before-close="handleBeforeClose"
+      @close="handleClose"
+    >
       <div style="width:65%;margin: 0 auto; ">
         <el-form  ref="form" size="small" label-width="80px" :rules="rules" :model="form" >
           <el-form-item label="菜单名称" prop="label">
@@ -69,8 +71,8 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    <el-button @click="dialogCancel">取 消</el-button>
+    <el-button :class="dialogType" type="primary" @click="dialogComfirm(dialogType)">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -85,6 +87,7 @@
     data() {
       return {
         dialogVisible: false,
+        dialogType:'',
         props: {
           stripe: true,
           border: true,
@@ -96,7 +99,8 @@
           isFold: true,
           expandType: false,
           selectionType: false,
-          'max-height': '500px'
+          'max-height': '500px',
+          emptyText:'1256'
         },
         data: [],
         parents: [],
@@ -149,9 +153,6 @@
             { required: true, message: '请输入菜单名称', trigger: 'blur' },
             { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
             ],
-          resourceUrl:[
-            { required: true, message: '请输入菜单路径', trigger: 'blur' },
-          ],
 
           state:[
             { required: true, message: '请选择激活状态 ', trigger: 'change' },
@@ -173,6 +174,48 @@
       },
     },
     methods: {
+      handleClose(){
+        this.form={
+          label:'',
+          resourceUrl:'',
+          resourcePid:[],
+          state:'',
+          resourceOrderNum:"",
+        }
+      },
+      dialogCancel(){
+        this.dialogVisible=false;
+        this.resetForm();
+      },
+      dialogComfirm(a){
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            if(a=='Add'){
+              this.$notify({
+                title: '成功',
+                message: '添加成功',
+                type: 'success',
+                duration:1500
+              });
+            }
+            if(a=='Editor'){
+              this.$notify({
+                title: '成功',
+                message: '修改成功',
+                type: 'success',
+                duration:1500
+              });;
+            }
+            this.dialogVisible=false;
+            this.resetForm();
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+
+
+      },
       urlreset(scope) {
         let result = scope.row.resourceUrl;
         if (result == '[Null]' || result == '-') {
@@ -208,10 +251,18 @@
 
       },
       handleAdd(){
+        this.dialogType='Add'
+        this.form={
+          label:'',
+          resourceUrl:'',
+          resourcePid:[],
+          state:'',
+          resourceOrderNum:"",
+        }
          this.dialogVisible=true;
       },
-      handleClose(done) {
-         this.resetForm()
+      handleBeforeClose(done) {
+         this.resetForm();
          done();
       },
       resetForm(formName) {
@@ -219,14 +270,16 @@
       },
       handleEditor(rowInfo){
         let rowValue =rowInfo.row;
+        console.log(rowValue);
+        this.dialogType='Editor';
         this.form={
           label:rowValue.label,
           resourceUrl:rowValue.resourceUrl,
-          resourcePid:rowValue.resourcePid?rowValue.resourcePid.split("-"):[],
+          resourcePid:rowValue.parentval,
           state:rowValue.state,
           resourceOrderNum:rowValue.resourceOrderNum,
         };
-         this.dialogVisible=true;
+        this.dialogVisible=true;
       }
     },
     mounted() {
@@ -245,8 +298,32 @@
           });
           return result
         }
-        let last = flat(menudata);
+        function getpval(arr) {
+          let result = [];
+          arr.forEach((item) => {
 
+            if(item.children){
+             result.push({
+               id:item.resourcePid,
+               child: getpval(item.children)
+             })
+            }else{
+              result.push({id:item.resourcePid});
+            }
+
+          });
+          return result
+        }
+
+        let last = flat(menudata);
+        let pval = getpval(menudata);
+        let lastpval=[];
+        console.log(pval);
+        pval.reduce((a,b)=>{
+          lastpval.push(a)
+          return a.concat( b)
+        },[pval[0]])
+        console.log(lastpval);
         this.parents = last;
         await  setTimeout(() => { //表头宽度调整
           this.resetWitdth()

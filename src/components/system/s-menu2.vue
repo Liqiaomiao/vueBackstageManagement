@@ -20,10 +20,9 @@
       :expand-type="props.expandType"
       :selection-type="props.selectionType"
       @tree-icon-click="handleExpand"
-      v-loading="loading2"
-      element-loading-text="拼命加载中"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.5)"
+
+      v-loading.fullscreen.lock="loading2"
+
     >
       <template slot="resourceUrl" slot-scope="scope">
         {{urlreset(scope)}}
@@ -56,7 +55,8 @@
           </el-form-item>
           <el-form-item label="父级节点" prop="resourcePid">
             <el-cascader
-              expand-trigger="hover"
+              filterable
+              change-on-select
               :options="data"
               v-model="form.resourcePid"
               >
@@ -86,6 +86,7 @@
 <script>
   import axios from 'axios'
   import {urls} from '../../apiConfig.js'
+  let vm={};
   export default {
     name: "s-menu2",
     data() {
@@ -288,51 +289,65 @@
       }
     },
     mounted() {
-      axios({
-        url: urls.getmenu
-      }).then(async (res) => {
-        this.loading2=false ;
-        if(res.data.status){
-          let menudata = res.data.obj;
-          this.data = menudata;
-          function flat(arr) {
-            let result = [];
-            arr.forEach((item) => {
-              if(item.children){
-                result=result.concat(flat(item.children))
-              }
-              result.push(item.label, item.value)
-            });
-            return result
+      let menudata2 = this.$store.state.menu.menudata;//使用store中的数据；没有的话调用
+      if(menudata2.length ==0){
+        axios({
+          url: urls.getmenu
+        }).then(async (res) => {
+          this.loading2=false ;
+          if(res.data.status){
+            let menudata = res.data.obj;
+            this.$store.commit('handlemenu',menudata)
+            this.data = menudata;
+            function flat(arr) {
+              let result = [];
+              arr.forEach((item) => {
+                if(item.children){
+                  result=result.concat(flat(item.children))
+                }
+                result.push(item.label, item.value)
+              });
+              return result
+            }
+            //last中存储菜单的名称和id,方便表格中根据pid找到父节点
+            let last = flat(menudata);
+            this.parents = last;
+            await  setTimeout(() => { //表头宽度调整
+              this.resetWitdth()
+            }, 10)
           }
-          let last = flat(menudata);
-          this.parents = last;
-          await  setTimeout(() => { //表头宽度调整
-            this.resetWitdth()
-          }, 10)
-        }
 
-      });
+        });
+      }else{
+        this.loading2=false ;
+        this.data=menudata2
+      }
+
       let $table = this.$refs.table.$el;
       let tableheader = $table.querySelector('.zk-table__header-wrapper');//获取表头div
       let tablebox = $table.querySelector('.zk-table__body-wrapper'); //获取表格主体div
       this.tableheader = tableheader;
       this.tablebody = tablebox;
-      this.resetHeight();
-      window.onresize = () => {
-        this.resetHeight()
-        this.resetWitdth()
-      }
-
-
+      vm =this;
+      window.addEventListener('resize',handleresize,false)
+    },
+    destroyed(){
+      window.removeEventListener('resize',handleresize,false)
     }
 
+  }
+  function  handleresize() {
+    vm.resetHeight()
+    vm.resetWitdth()
   }
 
 </script>
 
-<style>
+<style scoped>
   .zk-table{font-size: 14px;color:#606266}
   .button_container{padding-bottom: 15px;}
+
+</style>
+<style>
   .zk-table__body{border-bottom:1px solid #e9eaec}
 </style>

@@ -47,7 +47,6 @@
     import Tabs from './main-components/tabs.vue';//切签
     import axios from 'axios'
     import {urls} from '../apiConfig.js'
-
     export default{
         name:"Main",
         data(){

@@ -20,6 +20,10 @@
       :expand-type="props.expandType"
       :selection-type="props.selectionType"
       @tree-icon-click="handleExpand"
+      v-loading="loading2"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.5)"
     >
       <template slot="resourceUrl" slot-scope="scope">
         {{urlreset(scope)}}
@@ -86,6 +90,7 @@
     name: "s-menu2",
     data() {
       return {
+        loading2: true,
         dialogVisible: false,
         dialogType:'',
         props: {
@@ -286,48 +291,27 @@
       axios({
         url: urls.getmenu
       }).then(async (res) => {
-        let menudata = res.data.obj;
-        this.data = menudata;
-        function flat(arr) {
-          let result = [];
-          arr.forEach((item) => {
-             if(item.children){
-               result=result.concat(flat(item.children))
-             }
-               result.push(item.label, item.value)
-          });
-          return result
-        }
-        function getpval(arr) {
-          let result = [];
-          arr.forEach((item) => {
-
-            if(item.children){
-             result.push({
-               id:item.resourcePid,
-               child: getpval(item.children)
-             })
-            }else{
-              result.push({id:item.resourcePid});
-            }
-
-          });
-          return result
+        this.loading2=false ;
+        if(res.data.status){
+          let menudata = res.data.obj;
+          this.data = menudata;
+          function flat(arr) {
+            let result = [];
+            arr.forEach((item) => {
+              if(item.children){
+                result=result.concat(flat(item.children))
+              }
+              result.push(item.label, item.value)
+            });
+            return result
+          }
+          let last = flat(menudata);
+          this.parents = last;
+          await  setTimeout(() => { //表头宽度调整
+            this.resetWitdth()
+          }, 10)
         }
 
-        let last = flat(menudata);
-        let pval = getpval(menudata);
-        let lastpval=[];
-        console.log(pval);
-        pval.reduce((a,b)=>{
-          lastpval.push(a)
-          return a.concat( b)
-        },[pval[0]])
-        console.log(lastpval);
-        this.parents = last;
-        await  setTimeout(() => { //表头宽度调整
-          this.resetWitdth()
-        }, 10)
       });
       let $table = this.$refs.table.$el;
       let tableheader = $table.querySelector('.zk-table__header-wrapper');//获取表头div
@@ -347,7 +331,8 @@
 
 </script>
 
-<style scoped>
+<style>
   .zk-table{font-size: 14px;color:#606266}
   .button_container{padding-bottom: 15px;}
+  .zk-table__body{border-bottom:1px solid #e9eaec}
 </style>

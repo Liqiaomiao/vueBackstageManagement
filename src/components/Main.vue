@@ -45,7 +45,9 @@
     import Menu from './main-components/menu.vue';//侧导航
     import breadcrumbNav from './main-components/breadcrumb.vue';//面包屑
     import Tabs from './main-components/tabs.vue';//切签
-    import {menudata} from '../data/menu.js';     //菜单数据
+    import axios from 'axios'
+    import {urls} from '../apiConfig.js'
+
     export default{
         name:"Main",
         data(){
@@ -63,7 +65,7 @@
               collapseMain:{
                 paddingLeft:'50px'
               },
-              menuList:menudata.obj,//侧导航
+              menuList:'',//侧导航
               breads:[],//面包屑
               tabs:this.$store.state.app.tabs,
               tabActive:'',
@@ -75,8 +77,8 @@
           toggleClick(){//菜单开关
             this.isCollapse=!this.isCollapse;
           },
-          handleMenuSelect(index,indexPath){
-              let tablist=this.$store.state.app.tabs; //app.js    tabs:["首页", __ob__: Observer]
+          handleMenuSelect(index,indexPath){//选中菜单
+            let tablist=this.$store.state.app.tabs; //app.js    tabs:["首页", __ob__: Observer]
               let currentIndex=tablist.indexOf(index);//'首页'...
               if(currentIndex==-1){  //切签选项中不存在，增加
                 tablist.push(index);
@@ -96,7 +98,7 @@
               }
             var curbread=this.$store.state.app.breadsList
             curbread=Array.from(curbread);
-              curbread=JSON.stringify(curbread);
+            curbread=JSON.stringify(curbread);
             sessionStorage.setItem('tablist',tablist)//储存切签
             localStorage.setItem('currentBread',curbread)//储存面包屑
 
@@ -125,7 +127,11 @@
 
         },
         mounted(){
-
+          axios({
+            url:urls.getmenu
+          }).then((res)=>{
+          this.menuList=res.data.obj
+          });
           this.duplicatMethods();
           //this.duplicatMethods();//从404返回后能正常显示。
         },

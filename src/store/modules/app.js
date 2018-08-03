@@ -20,8 +20,12 @@ const app={
   state:{
     tabs:tablistval||['首页'],
     tabActive:"0",
+    tablist:[],
+    currentBread:[],
     breadsList:existedbread,
     Role
+  },
+  mutations:{
   }
 }
 export default app;

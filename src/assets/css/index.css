@@ -57,6 +57,7 @@ header{
   padding:16px 10px;
   overflow: hidden;
   height: 48px;
+  width: 100%;
 }
 /*tabs*/
 .ivu-tabs-bar{border-bottom: none}

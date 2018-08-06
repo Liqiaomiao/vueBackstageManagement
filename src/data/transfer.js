@@ -29,12 +29,5 @@ export const transfer={
   }, {
     id: 3,
     label: '一级 3',
-    children: [{
-      id: 7,
-      label: '二级 3-1'
-    }, {
-      id: 8,
-      label: '二级 3-2'
-    }]
   }]
 }

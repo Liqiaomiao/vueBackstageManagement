@@ -102,8 +102,8 @@ color:#495060;
 /*table*/
 .el-table__expanded-cell[class*=cell]{padding: 0 0 0 50px;}
 .el-table .cell{white-space: nowrap;text-overflow: ellipsis;overflow: hidden}
-.el-table{margin-top: 15px;}
 .table_box{clear: both}
+.button_container{padding-bottom: 15px;}
 /*form*/
 .verticalForm{width: 350px;margin:0 auto;}
 .el-cascader,.el-select,.el-input-number{width: 100%;}

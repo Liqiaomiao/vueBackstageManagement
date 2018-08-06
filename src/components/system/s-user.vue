@@ -1,9 +1,12 @@
 <template>
-  <commonTable :colConfigs="colConfigs" :data="tableData">
-    <el-table-column slot="opt" label="操作">
-      <el-button size="mini" slot-scope="{ row }">查看</el-button>
-    </el-table-column>
-  </commonTable>
+   <div>
+     <commonTable :colConfigs="colConfigs" :data="tableData">
+       <el-table-column slot="opt" label="操作">
+         <el-button size="mini" slot-scope="{ row }">查看</el-button>
+       </el-table-column>
+     </commonTable>
+   </div>
+
 </template>
 <style>
 

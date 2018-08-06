@@ -20,9 +20,7 @@
       :expand-type="props.expandType"
       :selection-type="props.selectionType"
       @tree-icon-click="handleExpand"
-
       v-loading.fullscreen.lock="loading2"
-
     >
       <template slot="resourceUrl" slot-scope="scope">
         {{urlreset(scope)}}
@@ -48,10 +46,10 @@
       <div style="width:65%;margin: 0 auto; ">
         <el-form  ref="form" size="small" label-width="80px" :rules="rules" :model="form" >
           <el-form-item label="菜单名称" prop="label">
-            <el-input v-model="form.label" ></el-input>
+            <el-input v-model="form.label" clearable></el-input>
           </el-form-item>
           <el-form-item label="菜单路径" prop="resourceUrl">
-            <el-input v-model="form.resourceUrl"></el-input>
+            <el-input v-model="form.resourceUrl" clearable></el-input>
           </el-form-item>
           <el-form-item label="父级节点" prop="resourcePid">
             <el-cascader
@@ -59,17 +57,18 @@
               change-on-select
               :options="data"
               v-model="form.resourcePid"
+              clearable
               >
             </el-cascader>
           </el-form-item>
           <el-form-item label="激活状态" prop="state">
-            <el-select v-model="form.state" placeholder="请选择激活状态">
+            <el-select v-model="form.state" placeholder="请选择激活状态" clearable>
               <el-option label="有效" value="1"></el-option>
               <el-option label="无效" value="2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="同级顺序" prop="resourceOrderNum">
-            <el-input v-model="form.resourceOrderNum"></el-input>
+            <el-input v-model.number="form.resourceOrderNum" clearable></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -165,7 +164,7 @@
           ],
           resourceOrderNum:[
             { required: true, message: '请输入同级顺序', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+            { type:'number',  message:'请输入数字',trigger:'blur' }
           ],
 
 
@@ -201,7 +200,7 @@
                 title: '成功',
                 message: '添加成功',
                 type: 'success',
-                duration:1500
+                duration:900
               });
             }
             if(a=='Editor'){
@@ -209,7 +208,7 @@
                 title: '成功',
                 message: '修改成功',
                 type: 'success',
-                duration:1500
+                duration:900
               });;
             }
             this.dialogVisible=false;
@@ -283,7 +282,7 @@
           resourceUrl:rowValue.resourceUrl,
           resourcePid:rowValue.parentval,
           state:rowValue.state,
-          resourceOrderNum:rowValue.resourceOrderNum,
+          resourceOrderNum:Number(rowValue.resourceOrderNum),
         };
         this.dialogVisible=true;
       }

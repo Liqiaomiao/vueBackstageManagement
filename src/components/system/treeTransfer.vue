@@ -41,7 +41,6 @@
 <style scoped lang="less">
   .treeTransfer {
     display: flex;
-
     & > .left,
     & > .right {
       width: 300px;

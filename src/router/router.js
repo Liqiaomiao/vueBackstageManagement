@@ -21,8 +21,7 @@ export const page404={
 }
 export const otherRouter=  {
   path: '/',
-  name: '首页',
-  redirect: '/home',
+  name: 'index',
   component: Main,
   children:[
     {path:'home',name:'首页',component:Home}

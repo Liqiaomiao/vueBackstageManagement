@@ -63,7 +63,7 @@ let menu = {
       "resourcePid": "1",
       "parentval": ["1"],
       "resourceState": "1",
-      "resourceUrl": "s-menu.html",
+      "resourceUrl": "first",
       "state": "1",
       "children": [{
         "value": "111",
@@ -72,7 +72,7 @@ let menu = {
         "resourceOrderNum": "1",
         "resourcePid": "11",
         "resourceState": "1",
-        "resourceUrl": "s-menu.html",
+        "resourceUrl": "second",
         "state": "1",
         "children": [{
           "value": "1111",
@@ -81,7 +81,7 @@ let menu = {
           "resourceOrderNum": "1",
           "resourcePid": "111",
           "resourceState": "1",
-          "resourceUrl": "s-menu.html",
+          "resourceUrl": "third",
           "state": "1"
         }]
       }]

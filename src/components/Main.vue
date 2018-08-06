@@ -15,7 +15,6 @@
                unique-opened
                @select="handleMenuSelect"
       >
-
         <Menu :menuList="this.menuList"></Menu>
       </el-menu>
 

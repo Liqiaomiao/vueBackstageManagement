@@ -288,7 +288,7 @@
       }
     },
     mounted() {
-      let menudata2 = this.$store.state.menu.menudata;//使用store中的数据；没有的话调用
+      let menudata2 = this.$store.state.menu.menudata;//使用store中的数据；没有的话请求
       if(menudata2.length ==0){
         axios({
           url: urls.getmenu
@@ -312,6 +312,7 @@
             let last = flat(menudata);
             this.parents = last;
             await  setTimeout(() => { //表头宽度调整
+              this.resetHeight()
               this.resetWitdth()
             }, 10)
           }

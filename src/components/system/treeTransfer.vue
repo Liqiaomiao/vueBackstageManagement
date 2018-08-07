@@ -2,7 +2,21 @@
   <div>
     <div class="treeTransfer">
       <div class="left">
-        <h5>{{valueable}}</h5>
+        <div class="fixedtop">
+          <h5>{{valueable}}</h5>
+          <div class="filerContainer">
+            <el-input
+              placeholder="输入关键字进行过滤"
+              v-model="filterText"
+              size="small"
+              class="filterContainer"
+            >
+            </el-input>
+          </div>
+
+        </div>
+
+
         <div class="treeContainer">
           <el-tree
             :data="data2"
@@ -13,13 +27,17 @@
             highlight-current
             :props="defaultProps"
             @check-change="handleChecked1"
+            :filter-node-method="filterNode"
           >
           </el-tree>
         </div>
 
       </div>
       <div class="right">
-        <h5>{{ownpower}}</h5>
+        <div class="fixedtop">
+          <h5>{{ownpower}}</h5>
+        </div>
+
         <div class="treeContainer">
           <el-tree
             ref="righttree"
@@ -93,16 +111,21 @@
 
       return {
         data2: treedata,
-        dataright: [],
-        datachecked: [],
-        rightResult: [],
+        dataright: [],   //已分配的数据
+        datachecked: [], //选中的值，用于移除权限后可分配权限的勾选状态更改
+        rightResult: [],//最终值
+        filterText:'',
         defaultProps: {
           children: 'children',
           label: 'label'
         }
       }
     },
-    watch: {},
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
     methods: {
       getCheckedNodes() {
         this.rightResult = flatten(this.dataright);
@@ -171,8 +194,11 @@
         this.datachecked.splice(index2, 1)
         this.$refs.tree.setCheckedNodes(this.datachecked);
 
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
       }
-
     },
     updated() {
 
@@ -181,7 +207,7 @@
 </script>
 
 <style scoped lang="less">
-  @titleH: 36px;
+  @titleH:40px;
   .treeTransfer {
     margin-bottom: 15px;
     display: flex;
@@ -206,6 +232,11 @@
         margin-left: 0;
       }
     }
+    .fixedtop{
+      position: absolute;
+      z-index: 2;
+      width: 100%;
+    }
     h5 {
       background: #f5f7fa;
       height: @titleH;
@@ -213,17 +244,21 @@
       padding-left: 20px;
       line-height: @titleH;
       border-bottom: 1px solid #eee;
-      position: absolute;
-      z-index: 2;
-      width: 100%;
+
     }
-    .treeContainer {
+    .treeContainer,.treeContainer2 {
       height: 100%;
       z-index: 0;
-      padding-top: @titleH;
-      height: 400px;
-
+      margin-top:@titleH*2.2;
+      height: 300px;
       overflow-y: auto;
+    }
+    .treeContainer2{
+      margin-top:@titleH;
+    }
+    .filerContainer{
+      padding: 10px 20px;
+      background: #fff;
     }
   }
 </style>

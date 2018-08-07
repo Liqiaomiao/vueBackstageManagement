@@ -78,11 +78,12 @@
             this.isCollapse=!this.isCollapse;
           },
           handleMenuSelect(index,indexPath){//选中菜单
-            let tablist=this.$store.state.app.tabs; //app.js    tabs:["首页", __ob__: Observer]
+              let tablist=this.$store.state.app.tabs; //app.js    tabs:["首页", __ob__: Observer]
               let currentIndex=tablist.indexOf(index);//'首页'...
               if(currentIndex==-1){  //切签选项中不存在，增加
                 tablist.push(index);
                 this.$store.state.app.breadsList.set(index,indexPath) //设置每页对应的面包屑 Map {{"菜单管理" => Array(2)}}
+
               }//路由内容更改，会触发update,所以切签如果存在，会触发usdate，即调用里面的方法（切签高亮；面包屑更改）
             //切换路由
               this.$router.push({

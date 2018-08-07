@@ -3,7 +3,7 @@
     <div class="treeTransfer">
       <div class="left">
         <div class="fixedtop">
-          <h5>{{valueable}}</h5>
+          <h5> <el-checkbox v-model="checked">{{valueable}}</el-checkbox></h5>
           <div class="filerContainer">
             <el-input
               placeholder="输入关键字进行过滤"
@@ -110,6 +110,7 @@
     data() {
 
       return {
+        checked:false,
         data2: treedata,
         dataright: [],   //已分配的数据
         datachecked: [], //选中的值，用于移除权限后可分配权限的勾选状态更改
@@ -124,6 +125,17 @@
     watch: {
       filterText(val) {
         this.$refs.tree.filter(val);
+      },
+      checked(val){
+        if(val){
+           let arr = treedata.filter( (item)=>{
+            return item
+          });
+
+          this.$refs.tree.setCheckedNodes(arr)
+        }else{
+          this.$refs.tree.setCheckedKeys([])
+        }
       }
     },
     methods: {

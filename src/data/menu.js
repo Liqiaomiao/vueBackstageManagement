@@ -29,18 +29,28 @@ let menu = {
     }, {
 
       "value": "a83839d7d3d743f1899371d67e731f42",
-      "label": "树形穿梭框",
+      "label": "权限分配",
       "resourceOrderNum": "4",
       "resourcePid": "9fc7e929e19e4accaea4a9c6ae4a5640",
       "parentval": ['9fc7e929e19e4accaea4a9c6ae4a5640'],
       "resourceState": "1",
-      "resourceUrl": "s-org.html",
+      "resourceUrl": "treeTransfer",
+      "state": 1
+    }, {
+
+      "value": "a83839d7d3d743f1899371d67e731f43",
+      "label": "图形界面",
+      "resourceOrderNum": "5",
+      "resourcePid": "9fc7e929e19e4accaea4a9c6ae4a5640",
+      "parentval": ['9fc7e929e19e4accaea4a9c6ae4a5640'],
+      "resourceState": "1",
+      "resourceUrl": "echartDemo",
       "state": 1
     }, {
 
       "value": "ae2e638f0802486c953215e7cb4159e2",
       "label": "富文本编辑器",
-      "resourceOrderNum": "5",
+      "resourceOrderNum": "6",
       "resourcePid": "9fc7e929e19e4accaea4a9c6ae4a5640",
       "parentval": ['9fc7e929e19e4accaea4a9c6ae4a5640'],
       "resourceState": "1",

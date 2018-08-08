@@ -11,4 +11,8 @@ export default {
 </script>
 
 <style >
+  .dialogform1{
+    width: 350px;
+    margin: 0 auto;
+  }
 </style>

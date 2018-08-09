@@ -12,6 +12,7 @@ import Video from '../components/system/s-video'//视频
 import tableTree from '../components/common-components/tableTree'// 树表格
 import treeTransfer from '../components/system/treeTransfer' //树形穿梭框
 import echartDemo from '../components/system/echartDemo' //树形穿梭框
+import tabsDemo from '../components/system/tabsDemo.vue' //切签
 export const page404={
   path: '/error',
   name: 'error-404',
@@ -41,6 +42,7 @@ export const appRouter=[
       {path:'tableTree',title:'树表格',name:'树表格',component:tableTree},
       {path:'treeTransfer',title:'权限分配',name:'权限分配',component:treeTransfer},
       {path:'echartDemo',title:'图形界面',name:'图形界面',component:echartDemo},
+      {path:'tabsDemo',title:'动态切签',name:'动态切签',component:tabsDemo},
     ]
   },{
     path: '/dispatch',

@@ -56,7 +56,30 @@ let menu = {
       "resourceState": "1",
       "resourceUrl": "s-area.html",
       "state": "1",
-    }],
+    },
+      {
+
+        "value": "ae2e638f0802486c953215e7cb4159e4",
+        "label": "视频播放",
+        "resourceOrderNum": "6",
+        "resourcePid": "9fc7e929e19e4accaea4a9c6ae4a5640",
+        "parentval": ['9fc7e929e19e4accaea4a9c6ae4a5640'],
+        "resourceState": "1",
+        "resourceUrl": "s-area.html",
+        "state": "1",
+      },
+      {
+
+        "value": "ae2e638f0802486c953215e7cb4159e5",
+        "label": "动态切签",
+        "resourceOrderNum": "6",
+        "resourcePid": "9fc7e929e19e4accaea4a9c6ae4a5640",
+        "parentval": ['9fc7e929e19e4accaea4a9c6ae4a5640'],
+        "resourceState": "1",
+        "resourceUrl": "tabs",
+        "state": "1",
+      }
+    ],
 
   }, {
     "value": "1",

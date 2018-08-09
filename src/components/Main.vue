@@ -26,7 +26,7 @@
         </Button>
         <breadcrumbNav :currentPath="breads"></breadcrumbNav>
         <div class="tags-con" >
-          <Tabs :tabActive="tabActive"></Tabs>
+          <Tabs :tabActive="tabActive" :tabs="tabs" v-on:active="acivechange" v-on:tabchange="tabchange"></Tabs>
         </div>
 
       </el-header>
@@ -67,28 +67,48 @@
               },
               menuList:menudata.obj,//侧导航
               breads:[],//面包屑
-              tabs:this.$store.state.app.tabs,
               tabActive:'',
               menuActive:'首页',
-
+              get tabs(){
+                let  tablist = sessionStorage.getItem('tablist');
+                if(tablist){
+                  return  tablist.split(',')
+                }else{
+                  retrun ['首页']
+                }
+              },
+              set tabs(value){
+                sessionStorage.setItem('tablist',value)
+              }
             }
         },
         methods:{
+          tabchange(value){
+            this.tabs=value;
+          },
+          acivechange(value){
+            this.tabActive=value
+          },
           toggleClick(){//菜单开关
             this.isCollapse=!this.isCollapse;
           },
           handleMenuSelect(index,indexPath){//选中菜单
-              let tablist=this.$store.state.app.tabs; //app.js    tabs:["首页", __ob__: Observer]
+              let tablist=this.tabs; //app.js    tabs:["首页", __ob__: Observer]
               let currentIndex=tablist.indexOf(index);//'首页'...
               if(currentIndex==-1){  //切签选项中不存在，增加
                 tablist.push(index);
                 this.$store.state.app.breadsList.set(index,indexPath) //设置每页对应的面包屑 Map {{"菜单管理" => Array(2)}}
-
+                this.tabActive = (Number(this.tabActive)+1).toString();
               }//路由内容更改，会触发update,所以切签如果存在，会触发usdate，即调用里面的方法（切签高亮；面包屑更改）
             //切换路由
-              this.$router.push({
+                else{
+                this.tabActive=(currentIndex+1).toString();
+              }
+            this.$router.push({
                 name: index
               });
+
+
                //404
               if(this.$route.matched.length==0){
                 this.$router.push({
@@ -119,7 +139,7 @@
 
 
 
-          }
+          },
         },
         computed:{
         },
@@ -128,15 +148,18 @@
 
         },
         mounted(){
-
           this.duplicatMethods();
+          let currenturl=this.$route.name;
+          if(currenturl=='index'||currenturl=='首页'){
+            sessionStorage.setItem('tablist',['首页'])
+          }
+
+
           //this.duplicatMethods();//从404返回后能正常显示。
         },
         updated(){//当1.数据发生更改 或者2.<router-view>内容给改时触发
           this.duplicatMethods();
         },
-
-
         components:{
           Menu,
           breadcrumbNav,

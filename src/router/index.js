@@ -9,7 +9,6 @@ const RouterConfig={
 
 export  const router=new Router(RouterConfig);
 router.beforeEach((to,from,next)=>{
-
   next();
 })
 router.afterEach((to,form)=>{

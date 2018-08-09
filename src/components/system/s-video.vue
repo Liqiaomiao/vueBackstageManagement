@@ -29,14 +29,14 @@
           muted: true,
           language: 'zh-cn',
           playbackRates: [0.7, 1.0, 1.5, 2.0],
-          // fluid: true,
+          fluid: true,
           // aspectRatio: '16:9',
           sources: [{
             withCredentials: false,
             type: "application/x-mpegURL",
             src: "http://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8"
           }],
-          poster: require('../../assets/images/one.png'),
+          // poster: require('../../assets/images/one.png'),
           notSupportedMessage: '此视频暂无法播放，请稍后再试',
           controlBar: {
             timeDivider: true,

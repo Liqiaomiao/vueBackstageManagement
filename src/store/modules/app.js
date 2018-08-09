@@ -5,7 +5,6 @@ import Role from "./role.js"
 import menu from "./menu"
 var tablist = sessionStorage.getItem("tablist");
 var currentbread=localStorage.getItem("currentBread");
-
 if(tablist){
   var tablistval=tablist.split(',');
 
@@ -17,9 +16,10 @@ if(currentbread){
     existedbread.set(item[0],item[1])
   }
 }
+
 const app={
   state:{
-    tabs:tablistval||['首页'],
+    tabs:sessionStorage.getItem("tablist")?sessionStorage.getItem("tablist").split(','):['首页'],
     tabActive:"0",
     tablist:[],
     currentBread:[],
@@ -27,7 +27,10 @@ const app={
     Role
   },
   mutations:{
+    tablechange(state,value){
+      this.state=value
+    }
   }
-}
+};
 export default app;
 

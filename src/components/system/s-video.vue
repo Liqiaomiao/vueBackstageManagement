@@ -92,7 +92,7 @@
       }
     },
     beforeDestroy() {
-      this.$refs.videojs.dispose()
+      this.$refs.videoPlayer.$destroy()
     }
   }
 

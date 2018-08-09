@@ -57,13 +57,18 @@
           return key != index;
         });
         this.currentIndex = tabActive.toString();   //新的高亮值；
-        // this.$store.state.app.tabs = this.tabs = tabs; //新的切签数据
 
-        var currentRouteName = Array.from(this.tabs)[parseInt(this.currentIndex)]; //路由切换
-        this.$router.push({
-          name: currentRouteName
-        });
-        this.$emit('active',(index-1).toString())
+          var currentRouteName = tabs[parseInt(this.currentIndex)]; //路由切换
+          this.$router.push({
+            name: currentRouteName
+          });
+        if( index== tabs.length){//当前页为最后一个 高亮给前一个
+          this.$emit('active',(index-1).toString() )
+        }else{  //当前页为中间 一个  高亮给最后一个
+          this.$emit('active',index)
+        }
+
+
         this.$emit('tabchange',tabs)
 
       },

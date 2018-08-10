@@ -46,7 +46,7 @@ header{
 .is-active.el-menu-item{background:#2d8cf0!important;color: #fff !important;border-right:2px solid #2d8cf0}
 .is-active.el-menu-item i{color: #2d8cf0 !important}
 .is-opened ul{background:#363e4f!important; }
-.el-submenu__title{padding:0 10px!important;}
+
 /*bread */
 .el-breadcrumb{
   position: absolute;
@@ -131,3 +131,4 @@ color:#495060;
 .bindtitle+div{position: relative;
   top:20px;}
 .tree_box{height: 350px;  overflow-y: auto;}
+.el-submenu .el-menu-item{padding:0 }

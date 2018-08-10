@@ -5,15 +5,14 @@
         <el-submenu  v-if="list.children" :key="list.value" :index="list.label"  >
 
           <!--父级html-->
-          <template slot="title"  style="padding-left:10px" >
-            <i class="el-icon-menu"></i>
+          <template slot="title" >
             <span slot="title">{{ list.label}}</span>
           </template>
           <!--递归的子集hmlt-->
-          <Menu :menuList="list.children"></Menu>
+          <Menu   :menuList="list.children"></Menu>
         </el-submenu>
         <!--循环子集-->
-        <el-menu-item v-else :index="list.label"  :key="list.value" style="padding-left: 50px;" >
+        <el-menu-item v-else :index="list.label"  :key="list.value" >
           <span>{{list.label}}</span>
         </el-menu-item>
       </template>
